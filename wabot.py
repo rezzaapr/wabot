@@ -121,7 +121,7 @@ class WABot():
             js5 = req.json()["graphql"]["user"]["profile_pic_url_hd"]
             data = {
                   "body": js5,
-                  "caption" : '🔎 *Hasil Pencarian Instagram* \n\n*Username* : '+par+'\n*Nama* : '+str(js2)+'\n*Bio* : '+str(js1)+'*Followers* : '+str(js3)+'\n*Following* :'+str(js4),
+                  "caption" : '🔎 *Hasil Pencarian Instagram* \n\n*Username* : '+par+'\n*Nama* : '+str(js2)+'\n*Bio* : '+str(js1)+'\n*Followers* : '+str(js3)+'\n*Following* :'+str(js4),
                   "filename": 'png',
                   "chatId": chatID
                   }
