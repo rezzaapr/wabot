@@ -114,8 +114,8 @@ class WABot():
             import json
             par = text[3:]
             req= r.get('https://www.instagram.com/'+par+'/?__a=1')
-            js1 = req.json()['graphql']['user']['biography']
-            js2 = req.json()['graphql']['user']['full_name']
+            js1 = req.json()["graphql"]["user"]["biography"]
+            js2 = req.json()["graphql"]["user"]["full_name"]
             js3 = req.json()["graphql"]["user"]["edge_followed_by"]["count"]
             js4 = req.json()["graphql"]["user"]["edge_follow"]["count"]
             js5 = req.json()["graphql"]["user"]["profile_pic_url_hd"]
