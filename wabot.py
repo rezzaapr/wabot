@@ -106,6 +106,16 @@ class WABot():
         answer = self.send_requests('sendMessage', data)
         return answer
 
+    def tts(self, chatID):
+        for message in self.dict_messages:
+            text = message['body'] 
+            data = {
+                'chatId': chatID,
+                'audio': 'https://api.farzain.com/tts.php?id='+text+'&apikey=JsaChFteVJakyjBa0M5syf64z&'
+            }
+            answer = self.send_requests('sendPTT', data)
+            return answer
+    
     def ig(self, chatID):
         for message in self.dict_messages:
             text = message['body']
@@ -146,6 +156,8 @@ class WABot():
                         return self.start(id)
                     elif text[0].lower() == 'yt':
                         return self.yts(id)
+                    elif text[0].lower() == 'tts':
+                        return self.tts(id)
                     elif text[0].lower() == 'gs':
                         return self.geo(id)
                     elif text[0].lower() == 'menu':
