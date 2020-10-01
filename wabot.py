@@ -15,6 +15,27 @@ class WABot():
         headers = {'Content-type': 'application/json'}
         answer = requests.post(url, data=json.dumps(data), headers=headers)
         return answer.json()
+    
+    def idn(self, chatID):
+        import requests as r
+        import json
+        from bs4 import BeautifulSoup as bs
+        for message in self.dict_messages:
+            text = message['body']
+            par = text[5:]
+            url = 'https://api.farzain.com/brainly.php?id='+par+'&apikey=JsaChFteVJakyjBa0M5syf64z&'
+            req= r.get(url)
+            js = req.json()
+            p= js[1]['url']
+            reqq = r.get(p)
+            be = bs(reqq.text, 'html.parser')
+            find = be.find('div', class_='sg-text sg-text--break-words brn-rich-content js-answer-content')
+            data = {
+               "body": find.text,
+               "chatId": chatID
+            }
+            answer = self.send_requests('sendMessage', data)
+            return answer
 
 
     def en(self, chatID):
