@@ -21,8 +21,8 @@ class WABot():
         import json
         from bs4 import BeautifulSoup as bs
         for message in self.dict_messages:
-            text = message['body']
-            par = text[6:]
+            tex = message['body']
+            par = tex[5:]
             url = 'https://api.farzain.com/brainly.php?id='+par+'&apikey=JsaChFteVJakyjBa0M5syf64z&'
             req= r.get(url)
             js = req.json()
