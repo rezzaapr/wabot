@@ -163,10 +163,12 @@ class WABot():
             js4 = req.json()["graphql"]["user"]["edge_follow"]["count"]
             js5 = req.json()["graphql"]["user"]["profile_pic_url_hd"]
             data = {
+                  "chatId": chatID,
                   "body": js5,
-                  "caption" : '🔎 *Hasil Pencarian Instagram* \n\n*Username* : '+par+'\n*Nama* : '+str(js2)+'\n*Bio* : '+str(js1)+'\n*Followers* : '+str(js3)+'\n*Following* :'+str(js4),
                   "filename": 'png',
-                  "chatId": chatID
+                  "caption" : '🔎 *Hasil Pencarian Instagram* \n\n*Username* : '+par+'\n*Nama* : '+str(js2)+'\n*Bio* : '+str(js1)+'\n*Followers* : '+str(js3)+'\n*Following* :'+str(js4)
+                  
+                  
                   }
             answer = self.send_requests('sendFile', data)
             return answer  
