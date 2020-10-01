@@ -31,7 +31,7 @@ class WABot():
             be = bs(reqq.text, 'html.parser')
             find = be.find('div', class_='sg-text sg-text--break-words brn-rich-content js-answer-content')
             data = {
-               "body": find,
+               "body": find.text,
                "chatId": chatID
             }
             answer = self.send_requests('sendMessage', data)
