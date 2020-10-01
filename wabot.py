@@ -16,7 +16,7 @@ class WABot():
         answer = requests.post(url, data=json.dumps(data), headers=headers)
         return answer.json()
     
-    def idn(self, chatID):
+    def br(self, chatID):
         import requests as r
         import json
         from bs4 import BeautifulSoup as bs
@@ -106,7 +106,7 @@ class WABot():
 
     def menu(self, chatID):
         data = {
-              "body": '*List Of Command* :\n\n🔖 *ig* _url_ ( Unduh Video Instagram )\n🔖 *fb* _url_ ( Unduh Video Facebook )\n🔖 *ig-profil* _username_ ( Melihat Profil Instagram )\n🔖 *gs* _query_ ( Mencari Google Acak )\n🔖 *terjemahan* _text_ ( ENG > IDN )\n🔖 *translate* _text_ ( IDN > ENG )\n🔖 *tts* _text_ ( Mengubah Pesan Jadi Suara )',
+              "body": '*List Of Command* :\n\n🔖 *ig* _url_ ( Unduh Video Instagram )\n🔖 *fb* _url_ ( Unduh Video Facebook )\n🔖 *ig-profil* _username_ ( Melihat Profil Instagram )\n🔖 *gs* _query_ ( Mencari Google Acak )\n🔖 *terjemahan* _text_ ( ENG > IDN )\n🔖 *translate* _text_ ( IDN > ENG )\n🔖 *tts* _text_ ( Mengubah Pesan Jadi Suara )\n🔖 *tanya* _pertanyaan_ ( Brainly Answer )',
               "chatId": chatID
               }
         answer = self.send_requests('sendMessage', data)
@@ -220,6 +220,8 @@ class WABot():
                         return self.tts(id)
                     elif text[0].lower() == 'gs':
                         return self.geo(id)
+                    elif text[0].lower() == 'tanya':
+                        return self.br(id)
                     elif text[0].lower() == 'menu':
                         return self.menu(id)
                     else:
