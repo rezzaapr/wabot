@@ -6,8 +6,8 @@ class WABot():
     def __init__(self, json):
         self.json = json
         self.dict_messages = json['messages']
-        self.APIUrl = 'https://eu151.chat-api.com/instance177938/'
-        self.token = 'mw64ciz883p9m0m0'
+        self.APIUrl = 'https://eu153.chat-api.com/instance197405/'
+        self.token = 'wb79e26hfz0edwyl'
         print(self.dict_messages)
    
     def send_requests(self, method, data):
@@ -106,7 +106,7 @@ class WABot():
 
     def menu(self, chatID):
         data = {
-              "body": '*List Of Command* :\n\n🔖 *ig* _url_ ( Unduh Video Instagram )\n🔖 *fb* _url_ ( Unduh Video Facebook )\n🔖 *ig-profil* _username_ ( Melihat Profil Instagram )\n🔖 *gs* _query_ ( Mencari Google Acak )\n🔖 *terjemahan* _text_ ( ENG > IDN )\n🔖 *translate* _text_ ( IDN > ENG )\n🔖 *tts* _text_ ( Mengubah Pesan Jadi Suara )\n🔖 *tanya* _pertanyaan_ ( Brainly Answer )',
+              "body": '*List Of Command* :\n\n🔖 *tulis* _text_ ( Membuat Tulisan Dibuku )\n🔖 *ig* _url_ ( Unduh Video Instagram )\n🔖 *fb* _url_ ( Unduh Video Facebook )\n🔖 *ig-profil* _username_ ( Melihat Profil Instagram )\n🔖 *gs* _query_ ( Mencari Google Acak )\n🔖 *terjemahan* _text_ ( ENG > IDN )\n🔖 *translate* _text_ ( IDN > ENG )\n🔖 *tts* _text_ ( Mengubah Pesan Jadi Suara )\n🔖 *tanya* _pertanyaan_ ( Brainly Answer )',
               "chatId": chatID
               }
         answer = self.send_requests('sendMessage', data)
@@ -194,6 +194,44 @@ class WABot():
             answer = self.send_requests('sendFile', data)
             return answer  
 
+
+    def tulis(self, chatID):
+        for message in self.dict_messages:
+            text = message['body']
+            tex = message['senderName']
+            import requests as r
+            import json
+            from nulis import tulis
+            import base64
+            par = text[5:]
+            tulis=tulis(par)
+            for i in tulis.tulis():
+                i.save('gambar.jpg')
+                image = open('gambar.jpg', 'rb')
+                image_read = image.read()
+                image_64_encode = base64.encodebytes(image_read)
+                api = 'b76b9a5f05dafad41987044532b9e400'
+                url = 'https://api.imgbb.com/1/upload'
+                par = {
+                 'key':api,
+                 'image':image_64_encode,
+                 'name':'nulis',
+                 'expiration': 60
+                }
+                headers = {
+                  'Accept': 'application/json'
+                }
+                req = r.post(url,data=par, headers=headers)
+                p = req.json()['data']['display_url']
+                data = {
+                     "chatId": chatID,
+                     "body": p,
+                     "filename": 'png',
+                     "caption" : '*Nih Ka Hasil Nya Maaf Kalo Jelek*'
+                    }
+                answer = self.send_requests('sendFile', data)
+                return answer  
+
     def processing(self):
         if self.dict_messages != []:
             for message in self.dict_messages:
@@ -220,6 +258,8 @@ class WABot():
                         return self.tts(id)
                     elif text[0].lower() == 'gs':
                         return self.geo(id)
+                    elif text[0].lower() == 'tulis':
+                        return self.tulis(id)
                     elif text[0].lower() == 'tanya':
                         return self.br(id)
                     elif text[0].lower() == 'menu':
