@@ -6,8 +6,8 @@ class WABot():
     def __init__(self, json):
         self.json = json
         self.dict_messages = json['messages']
-        self.APIUrl = 'https://eu153.chat-api.com/instance197405/'
-        self.token = 'wb79e26hfz0edwyl'
+        self.APIUrl = 'https://eu29.chat-api.com/instance212033/'
+        self.token = '443712sj8d626pvq'
         print(self.dict_messages)
    
     def send_requests(self, method, data):
@@ -16,36 +16,25 @@ class WABot():
         answer = requests.post(url, data=json.dumps(data), headers=headers)
         return answer.json()
     
-    def br(self, chatID):
+    def quotes(self, chatID):
         import requests as r
         import json
-        from bs4 import BeautifulSoup as bs
-        for message in self.dict_messages:
-            tex = message['body']
-            par = tex[5:]
-            url = 'https://api.farzain.com/brainly.php?id='+par+'&apikey=JsaChFteVJakyjBa0M5syf64z&'
-            req= r.get(url)
-            js = req.json()
-            p= js[1]['url']
-            reqq = r.get(p)
-            be = bs(reqq.text, 'html.parser')
-            find = be.find('div', class_='sg-text sg-text--break-words brn-rich-content js-answer-content')
-            data = {
-               "body": find.text,
-               "chatId": chatID
+        req= r.get('https://arugaz.herokuapp.com/api/randomquotes')
+        data = {
+            "body": '*'+req.json()['quotes']+'*\n\n\nBy :'+req.json()['author'],
+            "chatId": chatID
             }
-            answer = self.send_requests('sendMessage', data)
-            return answer
+        answer = self.send_requests('sendMessage', data)
+        return answer
 
 
-    def en(self, chatID):
+    def wiki(self, chatID):
         for message in self.dict_messages:
             text = message['body']
-            par = text[11:]
-            translator = Translator()
-            result = translator.translate(par, src='en', dest='id')
+            par = text[4:]
+            req = requests.get('https://arugaz.herokuapp.com/api/wiki?q='+par)
             data = {
-               "body": result.text,
+               "body": req.json()['result'],
                "chatId": chatID
             }
             answer = self.send_requests('sendMessage', data)
@@ -77,18 +66,19 @@ class WABot():
                 answer = self.send_requests('sendMessage', data)
                 return answer
 
-    def yts(self, chatID):
+    def jodohku(self, chatID):
         import pafy
         import urllib.request
         import re
         for message in self.dict_messages:
             text = message['body']
-            html = requests.get("https://www.youtube.com/results?search_query="+text[4:])
-            video_ids = re.findall(r"watch\?v=(\S{11})", html.text().decode())
-            paf = pafy.new('https://www.youtube.com/watch?v=b'+video_ids[0])
+            import re
+            nama = re.search(r'nama(.*)pasangan', text)
+            pasangan = re.search(r'pasangan(.*)', text)
+            req = requests.get('https://arugaz.herokuapp.com/api/jodohku?nama='+nama.group(1)+'&pasangan='+pasangan.group(1))
             data = {
-                  "body":'https://img.youtube.com/vi/'+video_ids[0],
-                  "caption" : '🔎 *Hasil Pencarian Youtube Acak*\n\n*Judul Video* : '+paf.title,
+                  "body":req.json()['gambar'],
+                  "caption" : 'Pasangan '+nama+' Dan '+pasangan,
                   "filename": 'jpg',
                   "chatId": chatID
                   }
@@ -106,7 +96,7 @@ class WABot():
 
     def menu(self, chatID):
         data = {
-              "body": '*List Of Command* :\n\n🔖 *tulis* _text_ ( Membuat Tulisan Dibuku )\n🔖 *ig* _url_ ( Unduh Video Instagram )\n🔖 *fb* _url_ ( Unduh Video Facebook )\n🔖 *ig-profil* _username_ ( Melihat Profil Instagram )\n🔖 *gs* _query_ ( Mencari Google Acak )\n🔖 *terjemahan* _text_ ( ENG > IDN )\n🔖 *translate* _text_ ( IDN > ENG )\n🔖 *tts* _text_ ( Mengubah Pesan Jadi Suara )\n🔖 *tanya* _pertanyaan_ ( Brainly Answer )',
+              "body": '*List Of Command* :\n\n🔖 *tulis* _text_ ( Membuat Tulisan Dibuku )\n🔖 *ig* _url_ ( Unduh Video Instagram )\n🔖 *fb* _url_ ( Unduh Video Facebook )\n🔖 *ig-profil* _username_ ( Melihat Profil Instagram )\n🔖 *gs* _query_ ( Mencari Google Acak )\n🔖 *wiki* _text_ ( wikipedia )\n🔖 *qoutes* ( randomquotes )\n🔖 *tts* _text_ ( Mengubah Pesan Jadi Suara )\n🔖 *lirik* _judul+artis_ ( Mencari Lirik Lagu )',
               "chatId": chatID
               }
         answer = self.send_requests('sendMessage', data)
@@ -242,16 +232,16 @@ class WABot():
                         return self.welcome(id)
                     elif text[0].lower() == 'translate':
                         return self.idn(id)
-                    elif text[0].lower() == 'terjemahan':
-                        return self.en(id)
+                    elif text[0].lower() == 'wiki':
+                        return self.wiki(id)
                     elif text[0].lower() == 'ig-profil':
                         return self.ig(id)
                     elif text[0].lower() == 'ig':
                         return self.igg(id)
                     elif text[0].lower() == 'start':
                         return self.start(id)
-                    elif text[0].lower() == 'yts':
-                        return self.yts(id)
+                    elif text[0].lower() == 'jodohku':
+                        return self.jodohku(id)
                     elif text[0].lower() == 'fb':
                         return self.fb(id)
                     elif text[0].lower() == 'tts':
@@ -260,8 +250,8 @@ class WABot():
                         return self.geo(id)
                     elif text[0].lower() == 'tulis':
                         return self.tulis(id)
-                    elif text[0].lower() == 'tanya':
-                        return self.br(id)
+                    elif text[0].lower() == 'quotes':
+                        return self.quotes(id)
                     elif text[0].lower() == 'menu':
                         return self.menu(id)
                     else:
